@@ -34,7 +34,7 @@ export default () => {
               <p>
                 Don't have an account yet?
                 <span>
-                  <Link id="register-button">Register an account</Link>
+                  <Link id="register-button" to="/register">Register an account</Link>
                 </span>
               </p>
               <small>or sign in with</small>
