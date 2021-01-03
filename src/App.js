@@ -7,6 +7,7 @@ import LoginPage from "./views/LoginPage.jsx";
 import RegisterPage from "./views/RegisterPage.jsx";
 import HomePage from "./views/HomePage.jsx";
 import AddPage from "./views/AddPage.jsx";
+import EditPage from "./views/EditPage.jsx"
 
 function App () {
   const [isAuth, setAuth] = React.useState(false)
@@ -67,6 +68,8 @@ function App () {
           <GuardRoute path="/home" component={() => <HomePage />} auth={isAuth}>
           </GuardRoute>
           <GuardRoute path="/add" component={() => <AddPage />} auth={isAuth}>
+          </GuardRoute>
+          <GuardRoute path="/edit/:id" component={() => <EditPage />} auth={isAuth}>
           </GuardRoute>
         </Switch>
       </Router>

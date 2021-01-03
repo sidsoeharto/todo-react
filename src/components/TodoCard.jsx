@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 function TodoCard (props) {
+  function deleteTodo (id) {
+    props.deleteTodo(id)
+  }
+
+  function updateTodo (id) {
+    props.updateTodo(id)
+  }
+
   return (
     <div className="card mt-2">
       <div id="todo-${el.id}">
@@ -12,15 +22,15 @@ function TodoCard (props) {
         </header>
         <div className="card-content">
           <div className="content">
-            <time>{props.todo.due_date}</time>
+            <time>{moment(props.todo.due_date).format('MMMM Do YYYY')}</time>
             <br />
             <p>{props.todo.description}</p>
           </div>
         </div>
         <div>
           <footer className="card-footer">
-            <a href="#" className="card-footer-item" onclick="event.preventDefault();document.getElementById('edit-todo-${el.id}').style.display = 'block';document.getElementById('todo-${el.id}').style.display = 'none';">Update</a>
-            <a href="#" className="card-footer-item" onclick="deleteTodo(${el.id})">Remove</a>
+            <Link className="card-footer-item" to={`/edit/${props.todo.id}`}>Update</Link>
+            <a href="#" className="card-footer-item" onClick={() => deleteTodo(props.todo.id)}>Remove</a>
           </footer>
         </div>
       </div>

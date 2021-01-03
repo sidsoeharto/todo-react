@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import TodoCard from "../components/TodoCard"
 import NewsCard from "../components/NewsCard"
 import axios from '../axios'
+import Swal from 'sweetalert2'
 
 export default (props) => {
   const [todos, setTodos] = React.useState([])
@@ -39,6 +40,40 @@ export default (props) => {
       })
   }
 
+  function deleteTodo (id) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          axios({
+            url:'/todos/' + id,
+            method: 'DELETE',
+            headers: {access_token: localStorage.getItem('access_token')}
+          })
+            .then(response => {
+              Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+              )
+            })
+            .catch(err => {
+              console.log(err)
+            })
+            .finally(() => {
+              getTodos()
+            })
+      }
+    })
+  }
+
   React.useEffect(() => {
     getTodos();
   } ,[])
@@ -63,7 +98,7 @@ export default (props) => {
           <div id="dashboard-main"className="column is-8 mt-3">
             <Link id="add-button" className="button is-link" to="/add">Add Todo</Link><br />
             <div id="todo-list">
-              {todos.map(todo => <TodoCard key={todo.id} todo={todo}/>)}
+              {todos.map(todo => <TodoCard key={todo.id} todo={todo} deleteTodo={deleteTodo}/>)}
             </div>
           </div>
         </div>

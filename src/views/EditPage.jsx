@@ -1,9 +1,11 @@
 import React from 'react'
-import { Link, useHistory } from 'react-router-dom';
-import axios from '../axios'
+import { Link, useHistory, useParams } from "react-router-dom";
+import axios from "../axios";
+import Swal from 'sweetalert2';
 
 export default (props) => {
-  let history = useHistory()
+  let history = useHistory();
+  const { id } = useParams();
 
   const [todo, setTodo] = React.useState({
     title: '',
@@ -18,36 +20,61 @@ export default (props) => {
     setTodo({...todo, [e.target.name] : e.target.value})
   }
 
-  const addTodo = (e) => {
+  const updateTodo = (e) => {
     e.preventDefault();
-
-    console.log(todo)
-
     axios({
-      url: "/todos",
-      method: "POST",
+      url: '/todos/' + id,
+      method: 'PUT',
       headers: {access_token: localStorage.getItem('access_token')},
       data: todo
     })
-      .then(response => {
-        console.log(response.data)
-        history.push("/home");
+      .then((response) => {
+        history.push("/")
+        Swal.fire({
+          icon: 'success',
+          title: 'Your task has been updated',
+          showConfirmButton: false,
+          timer: 1500
+        })
       })
-      .catch(err => {
+      .catch((err) => {
+        console.log(err.response.data);
+        Swal.fire({
+          icon: 'error',
+          title: 'Something went wrong!',
+          text: err.response.data.msg,
+        })
+      })
+  }
+
+  const getTodo = () => {
+    axios({
+      url: '/todos/' + id,
+      method: 'GET',
+      headers: {access_token: localStorage.getItem('access_token')}
+    })
+      .then((response) => {
+        setTodo(response.data)
+      })
+      .catch((err) => {
         console.log(err)
       })
   }
+
+  React.useEffect(() => {
+    getTodo()
+  }, [])
 
   return (
     <div id="main-page" className="container is-fluid mt-5">
       <div className="section p-0 is-medium is-justify-content-center">
         <div>
-          <h1 className="title notification is-primary has-text-white-ter">Add Todo:</h1> 
+          <h1 className="title notification is-primary has-text-white-ter">Edit Todo:</h1> 
         </div>     
         <div id="add-todo" className="hero is-white">
-          <form onSubmit={(e) => addTodo(e)}>
+          <form onSubmit={(e) => updateTodo(e)}>
             <div className="field">
-              <label for="todo-title">Title:</label>
+              <label htmlFor="todo-title">Title:</label>
               <input 
                 id="todo-title" 
                 className="input" 
@@ -58,7 +85,7 @@ export default (props) => {
               />
             </div>
             <div className="field">
-              <label for="todo-description" >Description</label>
+              <label htmlFor="todo-description" >Description</label>
               <textarea 
                 id="todo-description" 
                 className="textarea" 
@@ -70,13 +97,13 @@ export default (props) => {
               ></textarea>
             </div>
             <div className="field">
-              <label for="todo-due_date">Due Date</label>
+              <label htmlFor="todo-due_date">Due Date</label>
               <input 
                 id="todo-due_date" 
                 type="date" 
                 name="due_date" 
                 class="input"
-                value={due_date}
+                value={due_date.slice(0, 10)}
                 onChange={(e) => onInputChange(e)}
               />
             </div>

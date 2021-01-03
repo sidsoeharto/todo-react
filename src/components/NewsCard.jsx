@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../axios';
+import moment from 'moment'
 
 function NewsCard (props) {
   return (
@@ -17,7 +18,7 @@ function NewsCard (props) {
         <br />
         <div class="content">
           <p>{props.news.description}</p>
-          <p>{props.news.publishedAt}</p><br />
+          <p>{moment(props.news.publishedAt).format('MMMM Do YYYY')}</p><br />
           <a href={props.news.url}>Click to see more of this news</a>
         </div>
       </div>
