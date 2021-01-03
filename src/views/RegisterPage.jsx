@@ -1,8 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DescriptionCard from '../components/DescriptionCard';
+import axios from '../axios'
 
 export default (props) => {
+  let history = useHistory()
+
   const [name, setName] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
@@ -19,8 +22,25 @@ export default (props) => {
     setPassword(e.target.value)
   }
 
-  function onSubmit () {
-    props.register(name, email, password)
+  function register () {
+    const payload = {
+      name,
+      email,
+      password
+    }
+
+    axios({
+      url: '/register',
+      method: 'POST',
+      data: payload
+    })
+      .then((response) => {
+        console.log(response.data)
+        history.push("/")
+      })
+      .catch((err) => {
+        console.log(err.response.data)
+      })
   }
 
   return (
@@ -30,9 +50,9 @@ export default (props) => {
         <div className="column is-6 p-3">
           <div className="hero is-white is-medium" id="register-form">
             <h1 className="is-size-1 has-text-black-ter"> Register an Account </h1>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={register}>
               <div className="field">
-                <label for="register-name" className="label">Name:</label>
+                <label htmlFor="register-name" className="label">Name:</label>
                 <input 
                   type="text" 
                   className="input" 
@@ -42,7 +62,7 @@ export default (props) => {
                 />
               </div>
               <div className="field">
-                <label for="register-email" className="label">Email address:</label>
+                <label htmlFor="register-email" className="label">Email address:</label>
                 <input 
                   type="email" 
                   className="input" 
@@ -52,7 +72,7 @@ export default (props) => {
                 />
               </div>
               <div className="field">
-                <label for="register-password" className="label">Password</label>
+                <label htmlFor="register-password" className="label">Password</label>
                 <input 
                   type="password" 
                   className="input" 
