@@ -1,31 +1,48 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import DescriptionCard from '../components/DescriptionCard';
 
-export default () => {
+export default (props) => {
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
+
+  function onChangeEmail (e) {
+    setEmail(e.target.value)
+  }
+
+  function onChangePass (e) {
+    setPassword(e.target.value)
+  }
+
+  function onSubmit () {
+    props.login(email, password)
+  }
+
   return (
     <div className="container is-fluid mt-6 is-justify-content-center" id="login-form">
       <div className="columns">
         <DescriptionCard />
         <div className="column is-6 p-3">
           <div className="hero is-white is-medium">
-            <form onSubmit="">
+            <form onSubmit={onSubmit}>
               <div className="field">
-                <label for="login-email" className="label">Email address:</label>
+                <label htmlFor="login-email" className="label">Email address:</label>
                 <input 
                   type="email" 
                   className="input" 
                   id="login-email" 
                   placeholder="Enter email" 
+                  onChange={onChangeEmail}
                 />
               </div>
-              <div class="field">
-                <label for="login-password" className="label">Password:</label>
+              <div className="field">
+                <label htmlFor="login-password" className="label">Password:</label>
                 <input 
                   type="password" 
                   className="input" 
                   id="login-password" 
-                  placeholder="Password" 
+                  placeholder="Password"
+                  onChange={onChangePass}
                 />
               </div>
               <div className="control">
