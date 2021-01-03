@@ -53,15 +53,15 @@ export default (props) => {
         <div>
           <h1 className="title notification is-primary has-text-white-ter">Todo List:</h1> 
         </div>     
-        <div class="columns is-white">
-          <div id="news-today" class="column">
-            <h1 class="is-size-4 has-text-black-ter m-3">News Today</h1>
+        <div className="columns is-white">
+          <div id="news-today" className="column">
+            <h1 className="is-size-4 has-text-black-ter m-3">News Today</h1>
             <div id="news">
               <NewsCard news={news}/>
             </div>
           </div>
-          <div id="dashboard-main"class="column is-8 mt-3">
-            <a id="add-button" class="button is-link">Add Todo</a><br />
+          <div id="dashboard-main"className="column is-8 mt-3">
+            <Link id="add-button" className="button is-link" to="/add">Add Todo</Link><br />
             <div id="todo-list">
               {todos.map(todo => <TodoCard key={todo.id} todo={todo}/>)}
             </div>

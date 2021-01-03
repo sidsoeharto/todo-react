@@ -6,6 +6,7 @@ import GuardRoute from './routes/GuardRoute'
 import LoginPage from "./views/LoginPage.jsx";
 import RegisterPage from "./views/RegisterPage.jsx";
 import HomePage from "./views/HomePage.jsx";
+import AddPage from "./views/AddPage.jsx";
 
 function App () {
   const [isAuth, setAuth] = React.useState(false)
@@ -59,13 +60,13 @@ function App () {
           logout={logout}
         />
         <Switch>
-          <Route path="/" exact>
-            <LoginPage login={login}/>
-          </Route>
-          <Route path="/register">
-            <RegisterPage />
-          </Route>
+          <GuardRoute path="/" exact component={() => <LoginPage login={login} />} auth={!isAuth}>
+          </GuardRoute>
+          <GuardRoute path="/register" component={RegisterPage} auth={!isAuth}>
+          </GuardRoute>
           <GuardRoute path="/home" component={() => <HomePage />} auth={isAuth}>
+          </GuardRoute>
+          <GuardRoute path="/add" component={() => <AddPage />} auth={isAuth}>
           </GuardRoute>
         </Switch>
       </Router>
